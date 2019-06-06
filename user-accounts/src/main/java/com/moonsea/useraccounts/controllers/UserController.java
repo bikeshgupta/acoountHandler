@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,14 +12,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moonsea.useraccounts.bean.UserBean;
+import com.moonsea.useraccounts.bean.UserDetails;
 import com.moonsea.useraccounts.dto.CommonDTO;
 import com.moonsea.useraccounts.repos.UserBeanRepo;
+import com.moonsea.useraccounts.repos.UserDeatilsRepo;
 
 @RestController
 public class UserController {
 	
 	@Autowired
 	private UserBeanRepo userRepo;
+	
+	@Autowired
+	private UserDeatilsRepo udr;
 	
 	@GetMapping("/test")
 	public String test() {
@@ -40,6 +44,13 @@ public class UserController {
 	public List<UserBean> getUserData() {
 		return userRepo.findAll();
 	}
+	
+	@GetMapping("/all")
+	public List<UserDetails> getUserDetailsData() {
+		return udr.findAll();
+	}
+	
+	
 	
 	@PostMapping("/login")
 	public CommonDTO authenticateUser(@RequestBody UserBean user) {

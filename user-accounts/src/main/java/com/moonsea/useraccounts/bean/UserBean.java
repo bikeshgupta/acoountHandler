@@ -1,13 +1,25 @@
 package com.moonsea.useraccounts.bean;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name ="user")
 public class UserBean {
-	@Id @GeneratedValue
+	@Id 
+	@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 	@Column
 	private String fname;
@@ -24,12 +36,18 @@ public class UserBean {
 	@Column
 	private String password;
 	
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL,
+            mappedBy = "user")
+	private UserDetails userDeatils;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Address> address;
 	
 	
-	public UserBean(Long id, String fname, String mname, String lname, String username, String level, Boolean isActive,
+	public UserBean(String fname, String mname, String lname, String username, String level, Boolean isActive,
 			String password) {
 		super();
-		this.id = id;
 		this.fname = fname;
 		this.mname = mname;
 		this.lname = lname;
@@ -49,11 +67,32 @@ public class UserBean {
 		this.password = "password";
 	}
 	
+	
+	
+	
+
+	public List<Address> getAddress() {
+		return address;
+	}
+
+	public void setAddress(List<Address> address) {
+		this.address = address;
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public UserDetails getUserDeatils() {
+		return userDeatils;
+	}
+
+	public void setUserDeatils(UserDetails userDeatils) {
+		this.userDeatils = userDeatils;
 	}
 	
 	public String getFname() {

@@ -1,22 +1,34 @@
 package com.moonsea.useraccounts.bean;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+@Table(name="userdtls")
 public class UserDetails {
 	
 	@Id
-	private Long userId;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
 	@Column
 	private String mobile1;
 	@Column
 	private String mobile2;
-	@Column
-	private Address address;
+	
 	@Column
 	private String idProof;
 	@Column
@@ -34,6 +46,56 @@ public class UserDetails {
 	@Column
 	private String modifiedBy;
 	
+	 @JsonIgnore
+	 @OneToOne(fetch = FetchType.LAZY, optional = false)
+	 @JoinColumn(name = "user_id", nullable = false)
+	 private UserBean user;
+	 
+	 
+	
+	public UserBean getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(UserBean user) {
+		this.user = user;
+	}
+
+
+
+	public UserDetails() {
+	}
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public UserDetails(String mobile1, String mobile2, String idProof, String idProofNumber,
+			String degisnation, Long reportingTo) {
+		super();
+		this.mobile1 = mobile1;
+		this.mobile2 = mobile2;
+		this.idProof = idProof;
+		this.idProofNumber = idProofNumber;
+		this.degisnation = degisnation;
+		this.reportingTo = reportingTo;
+		createdBy="SYSTEM";
+		createdDate= new Date();
+	}
+	
+
 	public String getMobile1() {
 		return mobile1;
 	}
@@ -46,12 +108,7 @@ public class UserDetails {
 	public void setMobile2(String mobile2) {
 		this.mobile2 = mobile2;
 	}
-	public Address getAddress() {
-		return address;
-	}
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+	
 	public String getIdProof() {
 		return idProof;
 	}
